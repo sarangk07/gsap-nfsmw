@@ -211,7 +211,7 @@ function Landing() {
         start: "top center", // Start animation when the top of header reaches center of viewport----------
         end: "bottom center", // End animation when the bottom of header reaches center of viewport-----------
  
-        markers: true,
+        // markers: true,
         
       }
     });
@@ -229,7 +229,7 @@ function Landing() {
         start: "top bottom-=100", // Start animation when top of gallery is 100px above the bottom of viewport-----------
         end: "center center",
         toggleActions: "play none none reverse",
-        markers: true,
+        // markers: true,
         scrub:1
       }
     });
@@ -244,7 +244,7 @@ function Landing() {
         start: "top bottom-=100",
         end: "top center",
         toggleActions: "play none none reverse",
-        markers: true,
+        // markers: true,
         scrub:1
       }
     });
@@ -259,7 +259,7 @@ function Landing() {
         start: "bottom center", // Start when the bottom of the name section reaches center-----------
         end: "bottom top",
         toggleActions: "play none none reverse",
-        markers: true
+        // markers: true
       }
     });
     
