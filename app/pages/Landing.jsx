@@ -18,42 +18,42 @@ function Landing() {
     {
       'id': 1,
       'img': '/imgs/nfsmwg1.png',
-      "gif": 'https://media1.tenor.com/m/tPk_EIwIgEMAAAAd/need-for-speed-nfs.gif',
+      "gif": 'imgs/gifs/gif1.gif',
     },
     {
       'id': 2,
       'img': '/imgs/nfsmwg2.png',
-      "gif": 'https://media1.tenor.com/m/0vwlqr2FORcAAAAd/nfs-nfsmw.gif',
+      "gif": 'imgs/gifs/gif2.gif',
     },
     {
       'id': 3,
       'img': '/imgs/nfsmwg3.png',
-      "gif": 'https://media1.tenor.com/m/BLzYFzAgruYAAAAd/need-for-speed-nfs-most-wanted.gif',
+      "gif": 'imgs/gifs/gif3.gif',
     },
     {
       'id': 4,
       'img': '/imgs/nfsmwg4.png',
-      "gif": 'https://media1.tenor.com/m/1L_pBQsSKEoAAAAC/razor-callahan-i-never-want-to-see-your-face-again.gif',
+      "gif": 'imgs/gifs/gif4.gif',
     },
     {
       'id': 5,
       'img': '/imgs/nfsmwg5.png',
-      "gif": 'https://media1.tenor.com/m/Dm8NoD1U2vsAAAAC/need-for-speed-nfs.gif',
+      "gif": 'imgs/gifs/gif5.gif',
     },
     {
       'id': 6,
       'img': '/imgs/nfsmwg6.png',
-      "gif": 'https://media1.tenor.com/m/o1r2KfF3DxoAAAAd/nfsmw-nfs.gif',
+      "gif": 'imgs/gifs/gif6.gif',
     },
     {
       'id': 7,
       'img': '/imgs/nfsmwg7.png',
-      "gif": 'https://media1.tenor.com/m/aRXskPQv7gQAAAAd/need-for-speed-nfs.gif',
+      "gif": 'imgs/gifs/gif7.gif',
     },
     {
       'id': 8,
       'img': '/imgs/nfsmwg8.png',
-      "gif": 'https://media1.tenor.com/m/qiq3YMXJ-KwAAAAd/nfs-nfsmw.gif',
+      "gif": 'imgs/gifs/gif8.gif',
     },
   ];
 
@@ -99,7 +99,7 @@ function Landing() {
         // Landing background
         '/imgs/nfslanding.jpg',
         // Loading gif (preload first)
-        'https://media1.tenor.com/m/1jY4Vpse3scAAAAd/need-for-speed-loading-screen.gif',
+        'imgs/gifs/loading.gif',
         // Gallery images
         ...imgGallaryDataSetting.map(item => item.img),
         ...imgGallaryDataSetting.map(item => item.gif),
@@ -215,13 +215,13 @@ function Landing() {
   // Loading Screen
   if (isLoading) {
     return (
-      <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center">
+      <div className="fixed inset-0 z-50 bg-[#110e0e] flex flex-col items-center justify-center">
         <img
-          src="https://media1.tenor.com/m/1jY4Vpse3scAAAAd/need-for-speed-loading-screen.gif"
+          src="imgs/gifs/loading.gif"
           alt="Loading..."
           className="w-48 h-auto mb-8"
         />
-        <div className="w-64 h-2 bg-black rounded-full overflow-hidden">
+        <div className="w-64 h-2 bg-[#110e0e] rounded-full overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-300 ease-out"
             style={{ width: `${loadingProgress}%` }}
@@ -244,7 +244,7 @@ function Landing() {
         </div>
 
         {/* 2nd sec - img gallery*/}
-        <div ref={galleryRef} className='w-full h-fit my-2 grid grid-cols-2 justify-items-center align-middle gap-2 md:grid-cols-3 lg:grid-cols-4 overflow-hidden'>
+        <div ref={galleryRef} className='max-w-[120rem] mx-auto h-fit my-2 grid grid-cols-2 justify-items-center align-middle gap-2 md:grid-cols-3 lg:grid-cols-4 overflow-hidden'>
           {imgGallaryDataSetting?.map((x) => (
             <div
               key={x.id}
@@ -253,7 +253,7 @@ function Landing() {
             >
 
               <img
-                className={`absolute z-10 w-full h-full object-cover rounded-xl transition-opacity duration-300 ${clickedGif === x.id || null ? 'opacity-0' : 'opacity-100'
+                className={`absolute z-10 w-full h-full object-cover rounded transition-opacity duration-300 ${clickedGif === x.id || null ? 'opacity-0' : 'opacity-100'
                   } group-hover:opacity-0`}
                 src={x.img}
                 alt={x.id}
