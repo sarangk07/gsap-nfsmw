@@ -61,9 +61,35 @@ function Landing() {
   const headerRef = useRef(null);
   const galleryRef = useRef(null);
 
-  const [activeBlacklistIndex, setActiveBlacklistIndex] = useState(0);
+  // Start at index 14 (blacklist #15) since we scroll from 15 to 1
+  const [activeBlacklistIndex, setActiveBlacklistIndex] = useState(14);
   const blacklistRef = useRef(null);
   const blacklistContainerRef = useRef(null);
+  const playerNameRef = useRef(null);
+
+  // Animate player name when index changes - scale from large to current size
+  useEffect(() => {
+    if (isLoading || !playerNameRef.current) return;
+
+    // Kill any existing animations on this element
+    gsap.killTweensOf(playerNameRef.current);
+
+    // Animate from large scale to normal
+    gsap.fromTo(playerNameRef.current,
+      {
+        scale: 5,
+        opacity: 0,
+        y: -30,
+      },
+      {
+        scale: 1,
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        ease: "power2.out",
+      }
+    );
+  }, [activeBlacklistIndex, isLoading]);
 
   // Preload all images before showing the website
   useEffect(() => {
@@ -173,7 +199,8 @@ function Landing() {
           onUpdate: (self) => {
             const progress = self.progress;
             // Use same calculation as snap to ensure alignment
-            const index = Math.round(progress * (itemCount - 1));
+            // Reversed: start from last item (15) and go to first (1)
+            const index = (itemCount - 1) - Math.round(progress * (itemCount - 1));
             setActiveBlacklistIndex(index);
           }
         }
@@ -245,25 +272,26 @@ function Landing() {
           ))}
         </div>
 
-        {/* 3rd sec - black list section --- in progressssssssssssssssssss*/}
+        {/* 3rd sec - black list section */}
         {/* Blacklist Section */}
-        <div ref={blacklistRef} className='w-full min-h-screen bg-gradient-to-b from-black via-slate-800 to-black pt-3 relative'>
+        <div ref={blacklistRef} className='w-full min-h-screen bg-gradient-to-b from-black via-slate-800 to-black pt-3 relative  overflow-hidden'>
 
+          <div ref={blacklistContainerRef} className='container mx-auto flex flex-col justify-center items-center min-h-[calc(100vh-8rem)] md:min-h-[calc(100vh-12rem)]'>
 
-          <div ref={blacklistContainerRef} className='container mx-auto  flex flex-col justify-center items-center min-h-[calc(100vh-8rem)] md:min-h-[calc(100vh-12rem)]'>
-
-
-            <div key={`blacklist-${activeBlacklistIndex}`} className='text-center mb-1 md:mb-12  pb-2 w-full max-w-md mx-auto'>
+            {/* Player Name Header with Scale Animation */}
+            <div key={`blacklist-${activeBlacklistIndex}`} className='text-center mb-1 md:mb-12 pb-2 w-full max-w-md mx-auto'>
               <p className='text-xl font-semibold uppercase tracking-wider text-red-300 mb-1'>
                 {blackListPlayersDetails[activeBlacklistIndex]?.black_list_position || '??'}
               </p>
-              <h1 className='text-2xl sm:text-5xl font-bold text-gray-100 font-["Impact",_"Arial_Black",_sans-serif]'>
+              <h1
+                ref={playerNameRef}
+                className='text-2xl sm:text-5xl font-bold text-gray-100 font-["Impact",_"Arial_Black",_sans-serif] will-change-transform origin-center'
+              >
                 {blackListPlayersDetails[activeBlacklistIndex]?.name || 'UNKNOWN'}
               </h1>
             </div>
 
-
-            <div className='flex flex-col md:flex-row w-full max-w-5xl mx-auto gap-6 md:gap-8 items-stretch'>
+            <div className='flex flex-col  md:flex-row w-full max-w-5xl mx-auto gap-6 md:gap-8 items-stretch'>
 
               <div
                 className='flex flex-col bg-black/30 text-gray-200 p-3 rounded shadow-md w-full h-fit md:w-1/2 lg:w-2/5 border-l-4 border-black'
@@ -286,7 +314,7 @@ function Landing() {
                       key={`car-${activeBlacklistIndex}`}
                       src={blackListPlayersDetails[activeBlacklistIndex].car_img}
                       alt={blackListPlayersDetails[activeBlacklistIndex]?.car || 'Car Image'}
-                      className='w-full h-24 md:h-36 lg:h-64 object-cover rounded bg-gray-300 p-1 border border-gray-400'
+                      className='w-full h-36 sm:h-36 md:h-36 lg:h-64 object-cover rounded bg-gray-300 p-1 border border-gray-400'
                     />
                   ) : (
                     <div
