@@ -236,7 +236,7 @@ function Landing() {
       <div className='w-full h-fit bg-black'>
         {/* 1st sec - img */}
         <div ref={headerRef} className='w-full h-screen relative flex flex-col justify-center items-center'>
-          <img className='absolute top-0 left-[50%] lg:left-[45%] z-20 w-[7rem] h-[3rem] rounded-b-[1rem]' src="https://media1.tenor.com/m/1jY4Vpse3scAAAAd/need-for-speed-loading-screen.gif" alt="" />
+          <img className='absolute top-0 left-[50%] lg:left-[45%] z-20 w-[7rem] h-[3rem] rounded-b-[1rem]' src="/imgs/gifs/loading.gif" alt="" />
 
 
           <img loading='lazy' className='absolute w-full h-full object-cover' src="/imgs/nfslanding.jpg" alt="" />
