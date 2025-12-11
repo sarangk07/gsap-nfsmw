@@ -188,13 +188,13 @@ function Landing() {
   // Loading Screen
   if (isLoading) {
     return (
-      <div className="fixed inset-0 z-50 bg-zinc-500 flex flex-col items-center justify-center">
+      <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center">
         <img
           src="https://media1.tenor.com/m/1jY4Vpse3scAAAAd/need-for-speed-loading-screen.gif"
           alt="Loading..."
           className="w-48 h-auto mb-8"
         />
-        <div className="w-64 h-2 bg-gray-800 rounded-full overflow-hidden">
+        <div className="w-64 h-2 bg-black rounded-full overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-300 ease-out"
             style={{ width: `${loadingProgress}%` }}
