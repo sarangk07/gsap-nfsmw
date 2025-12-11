@@ -240,7 +240,7 @@ function Landing() {
 
 
           <img loading='lazy' className='absolute w-full h-full object-cover' src="/imgs/nfslanding.jpg" alt="" />
-          <h2 className='relative text-center text-5xl font-extrabold w-full'>NFS MOST WANTED</h2>
+          {/* <h2 className='relative text-center text-5xl font-extrabold w-full'>NFS MOST WANTED</h2> */}
         </div>
 
         {/* 2nd sec - img gallery*/}
