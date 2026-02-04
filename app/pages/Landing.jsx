@@ -67,28 +67,114 @@ function Landing() {
   const blacklistContainerRef = useRef(null);
   const playerNameRef = useRef(null);
 
-  // Animate player name when index changes - scale from large to current size
+  // Animate all elements when blacklist index changes
   useEffect(() => {
-    if (isLoading || !playerNameRef.current) return;
+    if (isLoading || !blacklistContainerRef.current) return;
 
-    // Kill any existing animations on this element
-    gsap.killTweensOf(playerNameRef.current);
+    // Kill any existing animations
+    gsap.killTweensOf(blacklistContainerRef.current.querySelectorAll('*'));
 
-    // Animate from large scale to normal
-    gsap.fromTo(playerNameRef.current,
+    // Create a timeline for staggered animations
+    const tl = gsap.timeline();
+
+    // Animate player name header
+    tl.fromTo(playerNameRef.current,
       {
-        scale: 5,
+        scale: 2.5,
         opacity: 0,
-        y: -30,
+        y: -60,
+        rotateZ: 15,
       },
       {
         scale: 1,
         opacity: 1,
         y: 0,
-        duration: 0.6,
-        ease: "power2.out",
-      }
+        rotateZ: 0,
+        duration: 0.7,
+        ease: "back.out",
+      },
+      0
     );
+
+    // Animate position text
+    const positionText = blacklistContainerRef.current.querySelector('.position-text');
+    if (positionText) {
+      tl.fromTo(positionText,
+        {
+          opacity: 0,
+          x: -50,
+        },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.5,
+          ease: "power2.out",
+        },
+        0.1
+      );
+    }
+
+    // Animate left info panel
+    const leftPanel = blacklistContainerRef.current.querySelector('.left-panel');
+    if (leftPanel) {
+      tl.fromTo(leftPanel,
+        {
+          opacity: 0,
+          x: -100,
+          rotateY: 45,
+        },
+        {
+          opacity: 1,
+          x: 0,
+          rotateY: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        },
+        0.15
+      );
+    }
+
+    // Animate right portrait panel
+    const rightPanel = blacklistContainerRef.current.querySelector('.right-panel');
+    if (rightPanel) {
+      tl.fromTo(rightPanel,
+        {
+          opacity: 0,
+          x: 100,
+          rotateY: -45,
+          scale: 0.8,
+        },
+        {
+          opacity: 1,
+          x: 0,
+          rotateY: 0,
+          scale: 1,
+          duration: 0.6,
+          ease: "power2.out",
+        },
+        0.15
+      );
+    }
+
+    // Animate info items with stagger
+    const infoItems = blacklistContainerRef.current.querySelectorAll('.info-item');
+    if (infoItems.length > 0) {
+      tl.fromTo(infoItems,
+        {
+          opacity: 0,
+          x: -30,
+        },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.4,
+          stagger: 0.08,
+          ease: "power2.out",
+        },
+        0.2
+      );
+    }
+
   }, [activeBlacklistIndex, isLoading]);
 
   // Preload all images before showing the website
@@ -273,53 +359,64 @@ function Landing() {
         </div>
 
         {/* 3rd sec - black list section */}
-        {/* Blacklist Section */}
-        <div ref={blacklistRef} className='w-full min-h-screen bg-gradient-to-b from-black via-slate-800 to-black pt-3 relative  overflow-hidden'>
+        {/* Blacklist Section with Enhanced Animations */}
+        <div ref={blacklistRef} className='w-full min-h-screen bg-gradient-to-b from-black via-slate-900 to-black pt-3 relative overflow-hidden perspective'>
 
-          <div ref={blacklistContainerRef} className='container mx-auto flex flex-col justify-center items-center min-h-[calc(100vh-8rem)] md:min-h-[calc(100vh-12rem)]'>
+          <div ref={blacklistContainerRef} className='container mx-auto flex flex-col justify-center items-center min-h-[calc(100vh-8rem)] md:min-h-[calc(100vh-12rem)] relative z-10'>
 
-            {/* Player Name Header with Scale Animation */}
-            <div key={`blacklist-${activeBlacklistIndex}`} className='text-center mb-1 md:mb-12 pb-2 w-full max-w-md mx-auto'>
-              <p className='text-xl font-semibold uppercase tracking-wider text-red-300 mb-1'>
+            {/* Player Name Header with Enhanced Animation */}
+            <div key={`blacklist-${activeBlacklistIndex}`} className='text-center mb-1 md:mb-12 pb-2 w-full max-w-md mx-auto will-change-transform'>
+              <p className='position-text text-xl font-semibold uppercase tracking-wider mb-1 font-mono will-change-transform text-gray-300'>
                 {blackListPlayersDetails[activeBlacklistIndex]?.black_list_position || '??'}
               </p>
               <h1
                 ref={playerNameRef}
                 className='text-2xl sm:text-5xl font-bold text-gray-100 font-["Impact",_"Arial_Black",_sans-serif] will-change-transform origin-center'
+                style={{
+                  textShadow: `0 0 30px rgba(0, 0, 0, 0.8), -2px -2px 5px rgba(255, 0, 0, 0.3)`,
+                  letterSpacing: '0.05em'
+                }}
               >
                 {blackListPlayersDetails[activeBlacklistIndex]?.name || 'UNKNOWN'}
               </h1>
             </div>
 
-            <div className='flex flex-col  md:flex-row w-full max-w-5xl mx-auto gap-6 md:gap-8 items-stretch'>
+            <div className='flex flex-col md:flex-row w-full max-w-5xl mx-auto gap-6 md:gap-8 items-stretch'>
 
+              {/* Left Panel - Vehicle and Info */}
               <div
-                className='flex flex-col bg-black/30 text-gray-200 p-3 rounded shadow-md w-full h-fit md:w-1/2 lg:w-2/5 border-l-4 border-black'
+                className='left-panel flex flex-col bg-gradient-to-br from-slate-800/40 to-black/60 text-gray-200 p-3 rounded-lg shadow-lg w-full h-fit md:w-1/2 lg:w-2/5 border-l-4 border-gray-500 will-change-transform'
               >
                 <div className='mb-auto space-y-1'>
-                  <p className='flex justify-between'><strong>Borough:</strong> <span>{blackListPlayersDetails[activeBlacklistIndex]?.borough || 'Undisclosed'}</span></p>
-                  <p className='flex justify-between'><strong>Strength:</strong> <span>{blackListPlayersDetails[activeBlacklistIndex]?.strength || 'Unknown'}</span></p>
-                  <p className='flex justify-between items-center'>
+                  <p className='info-item flex justify-between hover:text-gray-100 transition-colors'>
+                    <strong>Borough:</strong> 
+                    <span>{blackListPlayersDetails[activeBlacklistIndex]?.borough || 'Undisclosed'}</span>
+                  </p>
+                  <p className='info-item flex justify-between hover:text-gray-100 transition-colors'>
+                    <strong>Strength:</strong> 
+                    <span>{blackListPlayersDetails[activeBlacklistIndex]?.strength || 'Unknown'}</span>
+                  </p>
+                  <p className='info-item flex justify-between items-center hover:text-gray-100 transition-colors'>
                     <strong>Bounty:</strong>
-                    <span className='text-xl font-bold text-emerald-500 px-2 py-0.5 rounded'>
+                    <span className='text-xl font-bold px-2 py-0.5 rounded text-emerald-400 bg-black/30'>
                       {blackListPlayersDetails[activeBlacklistIndex]?.bounty ? `${blackListPlayersDetails[activeBlacklistIndex]?.bounty}` : 'N/A'}
                     </span>
                   </p>
                 </div>
 
-                <div className="mt-2 border-t border-gray-400">
-                  <p className='font-semibold mb-1'>{blackListPlayersDetails[activeBlacklistIndex]?.car || 'Vehicle Unknown'}</p>
+                <div className="mt-2 border-t border-gray-500">
+                  <p className='font-semibold mb-1 text-gray-100'>{blackListPlayersDetails[activeBlacklistIndex]?.car || 'Vehicle Unknown'}</p>
                   {blackListPlayersDetails[activeBlacklistIndex]?.car_img ? (
                     <img
                       key={`car-${activeBlacklistIndex}`}
                       src={blackListPlayersDetails[activeBlacklistIndex].car_img}
                       alt={blackListPlayersDetails[activeBlacklistIndex]?.car || 'Car Image'}
-                      className='w-full h-36 sm:h-36 md:h-36 lg:h-64 object-cover rounded bg-gray-300 p-1 border border-gray-400'
+                      className='w-full h-36 sm:h-36 md:h-36 lg:h-64 object-cover rounded-lg bg-gray-300 p-1 border-2 border-gray-500 will-change-transform shadow-lg'
                     />
                   ) : (
                     <div
                       key={`car-placeholder-${activeBlacklistIndex}`}
-                      className='w-full h-24 md:h-36 lg:h-64 flex items-center justify-center rounded bg-gray-700 p-1 border border-gray-400 text-gray-400'
+                      className='w-full h-24 md:h-36 lg:h-64 flex items-center justify-center rounded-lg bg-gray-700 p-1 border border-gray-400 text-gray-400'
                     >
                       No Image Available
                     </div>
@@ -327,20 +424,21 @@ function Landing() {
                 </div>
               </div>
 
+              {/* Right Panel - Portrait */}
               <div
-                className='w-full md:w-1/2 lg:w-3/5 flex justify-center items-center bg-black/30 p-2 rounded shadow-inner'
+                className='right-panel w-full md:w-1/2 lg:w-3/5 flex justify-center items-center bg-gradient-to-br from-slate-800/40 to-black/60 p-2 rounded-lg shadow-lg will-change-transform'
               >
                 {blackListPlayersDetails[activeBlacklistIndex]?.pic ? (
                   <img
                     key={`portrait-${activeBlacklistIndex}`}
                     src={blackListPlayersDetails[activeBlacklistIndex].pic}
                     alt={blackListPlayersDetails[activeBlacklistIndex]?.name || 'Mugshot'}
-                    className='max-h-80 h-56 md:h-[32rem] object-contain rounded border-4 border-gray-400 shadow-lg filter saturate-75 contrast-125'
+                    className='max-h-80 h-56 md:h-[32rem] object-contain rounded-lg border-4 border-gray-400 shadow-2xl filter saturate-75 contrast-125 will-change-transform'
                   />
                 ) : (
                   <div
                     key={`portrait-placeholder-${activeBlacklistIndex}`}
-                    className='max-h-80 h-56 md:h-[32rem] w-full flex items-center justify-center rounded border-4 border-gray-600 text-gray-400'
+                    className='max-h-80 h-56 md:h-[32rem] w-full flex items-center justify-center rounded-lg border-4 border-gray-600 text-gray-400'
                   >
                     No Portrait Available
                   </div>

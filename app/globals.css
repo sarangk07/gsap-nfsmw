@@ -24,3 +24,47 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* 3D Perspective for animations */
+.perspective {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+/* Smooth transitions for dynamic properties */
+.info-item {
+  transition: color 0.3s ease-out;
+}
+
+.info-item strong {
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+/* Enhance visibility of glowing effects */
+@keyframes glow-pulse {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(0, 150, 255, 0.5), 0 0 40px rgba(0, 100, 200, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(0, 150, 255, 0.8), 0 0 60px rgba(0, 100, 200, 0.5);
+  }
+}
+
+/* Smooth image transitions */
+img.will-change-transform {
+  will-change: transform, opacity, filter;
+}
+
+/* Hover effects for interactive elements */
+.left-panel:hover,
+.right-panel:hover {
+  transform: translateY(-2px);
+}
+
+/* Ensure proper rendering */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
