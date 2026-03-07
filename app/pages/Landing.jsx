@@ -67,6 +67,10 @@ function Landing() {
   const blacklistContainerRef = useRef(null);
   const playerNameRef = useRef(null);
 
+  // Audio state
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
+
   // Animate all elements when blacklist index changes
   useEffect(() => {
     if (isLoading || !blacklistContainerRef.current) return;
@@ -298,6 +302,56 @@ function Landing() {
     return () => ctx.revert();
   }, [isLoading]); // Re-run when loading completes
 
+  // Handle audio autoplay after loading complete
+  useEffect(() => {
+    if (!isLoading && audioRef.current) {
+      audioRef.current.volume = 0.3; // Default volume 30%
+
+      const attemptPlay = () => {
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            setIsPlaying(true);
+          }).catch(err => {
+            console.log("Audio autoplay prevented by browser. Waiting for user interaction.");
+            setIsPlaying(false);
+          });
+        }
+      };
+
+      attemptPlay();
+
+      // Browsers block autoplay audio. We wait for any click or keydown to start the audio.
+      const handleFirstInteraction = () => {
+        if (audioRef.current && audioRef.current.paused) {
+          attemptPlay();
+        }
+        document.removeEventListener('click', handleFirstInteraction);
+        document.removeEventListener('keydown', handleFirstInteraction);
+      };
+
+      document.addEventListener('click', handleFirstInteraction);
+      document.addEventListener('keydown', handleFirstInteraction);
+
+      return () => {
+        document.removeEventListener('click', handleFirstInteraction);
+        document.removeEventListener('keydown', handleFirstInteraction);
+      };
+    }
+  }, [isLoading]);
+
+  const toggleAudio = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        audioRef.current.play();
+        setIsPlaying(true);
+      }
+    }
+  };
+
   // Loading Screen
   if (isLoading) {
     return (
@@ -319,6 +373,30 @@ function Landing() {
   }
   return (
     <>
+      <audio ref={audioRef} src="/titlesong.mp3" loop preload="auto" />
+
+      {/* Floating Audio Toggle Button */}
+      <button
+        onClick={toggleAudio}
+        className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[100] p-3 md:p-4 rounded-full  text-white transition-all duration-300 hover:scale-110 shadow-[0_0_20px_rgba(0,180,255,0.2)] hover:shadow-[0_0_25px_rgba(0,180,255,0.4)] hover:border-cyan-500 group cursor-pointer"
+        aria-label={isPlaying ? "Mute" : "Unmute"}
+        title={isPlaying ? "Mute Audio" : "Play Audio"}
+      >
+        {isPlaying ? (
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 md:w-6 md:h-6 text-cyan-400 group-hover:text-cyan-300 transition-colors drop-shadow-[0_0_5px_rgba(34,211,238,0.8)]">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+        ) : (
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 md:w-6 md:h-6 text-red-500 group-hover:text-red-400 transition-colors drop-shadow-[0_0_5px_rgba(239,68,68,0.8)]">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        )}
+      </button>
+
       <div className='w-full h-fit bg-black'>
         {/* 1st sec - img */}
         <div ref={headerRef} className='w-full h-screen relative flex flex-col justify-center items-center'>
@@ -389,11 +467,11 @@ function Landing() {
               >
                 <div className='mb-auto space-y-1'>
                   <p className='info-item flex justify-between hover:text-gray-100 transition-colors'>
-                    <strong>Borough:</strong> 
+                    <strong>Borough:</strong>
                     <span>{blackListPlayersDetails[activeBlacklistIndex]?.borough || 'Undisclosed'}</span>
                   </p>
                   <p className='info-item flex justify-between hover:text-gray-100 transition-colors'>
-                    <strong>Strength:</strong> 
+                    <strong>Strength:</strong>
                     <span>{blackListPlayersDetails[activeBlacklistIndex]?.strength || 'Unknown'}</span>
                   </p>
                   <p className='info-item flex justify-between items-center hover:text-gray-100 transition-colors'>
